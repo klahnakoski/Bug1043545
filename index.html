@@ -6,18 +6,21 @@
 </head>
 <body>
 
-This page test the CORS problem <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1043545">https://bugzilla.mozilla.org/show_bug.cgi?id=1043545</a>.
+This page test the CORS problem <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1043545">https://bugzilla.mozilla.org/show_bug.cgi?id=1043545</a>.<br>
+
 <h1 id="result"></h1>
 
 <script type="application/javascript">
 $(document).ready(function(){
 
+	$("#result").html("Send Bad Request");
 	request(
-		"http://elasticsearch-private.bugs.scl3.mozilla.com:9200/does_not_exist/_mapping",  //FORCE A 404
+		"https://esfrontline.bugzilla.mozilla.org:443/does_not_exist/_mapping",  //FORCE A 404 (w RESTRICTIVE CORS HEADER)
 		function doneBadRequest(result){
 			console.info("result = "+result);
+			$("#result").html("Send Good Request");
 			request(
-				"http://elasticsearch-private.bugs.scl3.mozilla.com:9200/private_bugs/bug_version/_mapping", //LEGITIMATE
+				"https://esfrontline.bugzilla.mozilla.org:443/public_bugs/bug_version", //LEGITIMATE
 				function doneGoodRequest(result){
 					console.info("result = "+result);
 					if (result != 200) {
